@@ -7,6 +7,7 @@
     <div class="container">
         <span class="eyebrow">Review</span>
         <h1>Ulasan Pelanggan</h1>
+        <p>Baca pengalaman pelanggan Captain Blank setelah trip snorkeling, mulai dari pelayanan, destinasi, hingga kenyamanan perjalanan mereka.</p>
     </div>
 </section>
 <section class="section">
