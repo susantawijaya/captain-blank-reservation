@@ -898,6 +898,48 @@ tbody tr:hover td {
     align-items: center;
 }
 
+.review-card-copy {
+    margin: 18px 0 0;
+    color: #334155;
+    font-size: 1.05rem;
+    line-height: 1.8;
+}
+
+.review-card-footer {
+    margin-top: 22px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(216, 233, 244, 0.82);
+}
+
+.review-card-footer h3 {
+    margin: 0;
+    color: var(--ink);
+    font-size: 1rem;
+}
+
+.review-card-details {
+    display: grid;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.review-card-details p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+    line-height: 1.65;
+}
+
+.review-card-label {
+    display: inline-block;
+    min-width: 86px;
+    margin-right: 8px;
+    color: var(--sea-deep);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
 .field input[type="file"] {
     padding: 12px;
 }
@@ -977,6 +1019,24 @@ tbody tr:hover td {
 
 .page-header:not(:has(p)) > .container {
     padding: 56px 0 68px;
+}
+
+.review-filter-stack {
+    margin-top: -40px;
+    position: relative;
+    z-index: 2;
+}
+
+.review-filter-card {
+    border-radius: 30px;
+}
+
+.review-results-section {
+    padding-top: 28px;
+}
+
+.grid-full-span {
+    grid-column: 1 / -1;
 }
 
 .footer {

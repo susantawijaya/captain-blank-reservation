@@ -3,7 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\Destination;
+use App\Models\Reservation;
+use App\Models\Review;
 use App\Models\SnorkelingPackage;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -147,5 +150,223 @@ class PublicListingFilterTest extends TestCase
         $response->assertSee('Paket Penuh');
         $response->assertSee('Habis');
         $response->assertSee('Semua kapal pada jadwal aktif saat ini sudah terpakai.');
+    }
+
+    public function test_public_review_page_shows_package_and_destination_in_review_card(): void
+    {
+        $customer = User::factory()->create([
+            'name' => 'Santa',
+            'role' => 'customer',
+        ]);
+
+        $destination = Destination::query()->create([
+            'name' => 'Crystal Bay',
+            'slug' => 'crystal-bay-review',
+            'description' => 'Spot untuk review publik.',
+            'difficulty' => 'mudah',
+            'status' => 'aktif',
+        ]);
+
+        $package = SnorkelingPackage::query()->create([
+            'name' => 'Lembongan Morning Escape',
+            'slug' => 'lembongan-morning-escape-review',
+            'short_description' => 'Trip pagi.',
+            'description' => 'Trip pagi untuk pengujian review.',
+            'price' => 450000,
+            'duration' => '4 jam',
+            'capacity' => 8,
+            'status' => 'aktif',
+        ]);
+
+        $package->destinations()->sync([$destination->id]);
+
+        $reservation = Reservation::query()->create([
+            'code' => 'RVW-SHOW-001',
+            'user_id' => $customer->id,
+            'snorkeling_package_id' => $package->id,
+            'destination_id' => $destination->id,
+            'booking_date' => now()->toDateString(),
+            'participants' => 2,
+            'contact_name' => 'Santa',
+            'contact_phone' => '08123456789',
+            'pickup_location' => 'Pelabuhan',
+            'total_price' => 450000,
+            'status' => 'selesai',
+        ]);
+
+        Review::query()->create([
+            'reservation_id' => $reservation->id,
+            'user_id' => $customer->id,
+            'snorkeling_package_id' => $package->id,
+            'rating' => 5,
+            'comment' => 'Tripnya rapi dan menyenangkan.',
+            'status' => 'published',
+        ]);
+
+        $response = $this->get(route('reviews.index'));
+
+        $response->assertOk();
+        $response->assertSee('Lembongan Morning Escape');
+        $response->assertSee('Crystal Bay');
+    }
+
+    public function test_public_review_page_can_filter_by_package_destination_rating_and_order(): void
+    {
+        $matchingCustomer = User::factory()->create([
+            'name' => 'Santa',
+            'role' => 'customer',
+        ]);
+
+        $matchingDestination = Destination::query()->create([
+            'name' => 'Crystal Bay',
+            'slug' => 'crystal-bay-filter',
+            'description' => 'Spot filter utama.',
+            'difficulty' => 'mudah',
+            'status' => 'aktif',
+        ]);
+
+        $otherDestination = Destination::query()->create([
+            'name' => 'Wall Point',
+            'slug' => 'wall-point-filter',
+            'description' => 'Spot pembanding.',
+            'difficulty' => 'menengah',
+            'status' => 'aktif',
+        ]);
+
+        $matchingPackage = SnorkelingPackage::query()->create([
+            'name' => 'Lembongan Morning Escape',
+            'slug' => 'lembongan-morning-escape-filter-review',
+            'short_description' => 'Trip pagi.',
+            'description' => 'Trip pagi untuk review filter.',
+            'price' => 450000,
+            'duration' => '4 jam',
+            'capacity' => 8,
+            'status' => 'aktif',
+        ]);
+
+        $otherPackage = SnorkelingPackage::query()->create([
+            'name' => 'Adventure Reef Run',
+            'slug' => 'adventure-reef-run-filter-review',
+            'short_description' => 'Trip siang.',
+            'description' => 'Trip siang untuk review filter.',
+            'price' => 520000,
+            'duration' => '4 jam',
+            'capacity' => 8,
+            'status' => 'aktif',
+        ]);
+
+        $matchingPackage->destinations()->sync([$matchingDestination->id]);
+        $otherPackage->destinations()->sync([$otherDestination->id]);
+
+        $olderReservation = Reservation::query()->create([
+            'code' => 'RVW-FILTER-001',
+            'user_id' => $matchingCustomer->id,
+            'snorkeling_package_id' => $matchingPackage->id,
+            'destination_id' => $matchingDestination->id,
+            'booking_date' => now()->subDays(4)->toDateString(),
+            'participants' => 2,
+            'contact_name' => 'Santa',
+            'contact_phone' => '08123456789',
+            'pickup_location' => 'Pelabuhan',
+            'total_price' => 450000,
+            'status' => 'selesai',
+        ]);
+
+        $olderReview = Review::query()->create([
+            'reservation_id' => $olderReservation->id,
+            'user_id' => $matchingCustomer->id,
+            'snorkeling_package_id' => $matchingPackage->id,
+            'rating' => 5,
+            'comment' => 'Review lama yang harus tampil.',
+            'status' => 'published',
+        ]);
+        $olderReview->timestamps = false;
+        $olderReview->created_at = now()->subDays(4)->setTime(8, 0);
+        $olderReview->updated_at = now()->subDays(4)->setTime(8, 0);
+        $olderReview->save();
+
+        $newerReservation = Reservation::query()->create([
+            'code' => 'RVW-FILTER-002',
+            'user_id' => $matchingCustomer->id,
+            'snorkeling_package_id' => $matchingPackage->id,
+            'destination_id' => $matchingDestination->id,
+            'booking_date' => now()->subDay()->toDateString(),
+            'participants' => 2,
+            'contact_name' => 'Santa',
+            'contact_phone' => '08123456789',
+            'pickup_location' => 'Pelabuhan',
+            'total_price' => 450000,
+            'status' => 'selesai',
+        ]);
+
+        $newerReview = Review::query()->create([
+            'reservation_id' => $newerReservation->id,
+            'user_id' => $matchingCustomer->id,
+            'snorkeling_package_id' => $matchingPackage->id,
+            'rating' => 5,
+            'comment' => 'Review baru yang harus tampil lebih dulu.',
+            'status' => 'published',
+        ]);
+        $newerReview->timestamps = false;
+        $newerReview->created_at = now()->subDay()->setTime(10, 0);
+        $newerReview->updated_at = now()->subDay()->setTime(10, 0);
+        $newerReview->save();
+
+        $otherCustomer = User::factory()->create([
+            'name' => 'Xander',
+            'role' => 'customer',
+        ]);
+
+        $otherReservation = Reservation::query()->create([
+            'code' => 'RVW-FILTER-999',
+            'user_id' => $otherCustomer->id,
+            'snorkeling_package_id' => $otherPackage->id,
+            'destination_id' => $otherDestination->id,
+            'booking_date' => now()->toDateString(),
+            'participants' => 2,
+            'contact_name' => 'Xander',
+            'contact_phone' => '08123450000',
+            'pickup_location' => 'Dermaga',
+            'total_price' => 520000,
+            'status' => 'selesai',
+        ]);
+
+        Review::query()->create([
+            'reservation_id' => $otherReservation->id,
+            'user_id' => $otherCustomer->id,
+            'snorkeling_package_id' => $otherPackage->id,
+            'rating' => 3,
+            'comment' => 'Review pembanding yang tidak boleh lolos filter.',
+            'status' => 'published',
+        ]);
+
+        $filteredResponse = $this->get(route('reviews.index', [
+            'package' => $matchingPackage->id,
+            'destination' => $matchingDestination->id,
+            'rating' => '5',
+            'order' => 'latest',
+        ]));
+
+        $filteredResponse->assertOk();
+        $filteredResponse->assertSee('Review baru yang harus tampil lebih dulu.');
+        $filteredResponse->assertSee('Review lama yang harus tampil.');
+        $filteredResponse->assertDontSee('Review pembanding yang tidak boleh lolos filter.');
+        $filteredResponse->assertSeeTextInOrder([
+            'Review baru yang harus tampil lebih dulu.',
+            'Review lama yang harus tampil.',
+        ]);
+
+        $oldestResponse = $this->get(route('reviews.index', [
+            'package' => $matchingPackage->id,
+            'destination' => $matchingDestination->id,
+            'rating' => '5',
+            'order' => 'oldest',
+        ]));
+
+        $oldestResponse->assertOk();
+        $oldestResponse->assertSeeTextInOrder([
+            'Review lama yang harus tampil.',
+            'Review baru yang harus tampil lebih dulu.',
+        ]);
     }
 }

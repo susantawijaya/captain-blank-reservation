@@ -115,7 +115,7 @@ class CustomerPageController extends Controller
         $user = $this->currentCustomer();
 
         return view('customer.reviews.index', [
-            'reviews' => Review::with('package')->where('user_id', $user?->id)->latest()->get(),
+            'reviews' => Review::with(['package', 'reservation.destination'])->where('user_id', $user?->id)->latest()->get(),
         ]);
     }
 

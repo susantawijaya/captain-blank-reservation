@@ -26,7 +26,7 @@ class PublicPageController extends Controller
             'company' => CompanyProfile::first(),
             'packages' => $this->featuredHomePackages(),
             'destinations' => $this->featuredHomeDestinations(),
-            'reviews' => Review::with(['user', 'package'])->where('status', 'published')->latest()->take(3)->get(),
+            'reviews' => Review::with(['user', 'package', 'reservation.destination'])->where('status', 'published')->latest()->take(3)->get(),
             'galleryItems' => GalleryItem::where('is_featured', true)->take(6)->get(),
             'faqs' => Faq::orderBy('sort_order')->take(6)->get(),
         ]);
@@ -136,10 +136,55 @@ class PublicPageController extends Controller
         return redirect()->route('packages.index');
     }
 
-    public function reviews()
+    public function reviews(Request $request)
     {
+        $validated = $request->validate([
+            'package' => ['nullable', 'integer', 'min:1'],
+            'destination' => ['nullable', 'integer', 'min:1'],
+            'rating' => ['nullable', 'in:all,1,2,3,4,5'],
+            'order' => ['nullable', 'in:latest,oldest'],
+        ]);
+
+        $filters = [
+            'package' => $validated['package'] ?? null,
+            'destination' => $validated['destination'] ?? null,
+            'rating' => $validated['rating'] ?? 'all',
+            'order' => $validated['order'] ?? 'latest',
+        ];
+
+        $packageIds = Review::query()
+            ->where('status', 'published')
+            ->whereNotNull('snorkeling_package_id')
+            ->distinct()
+            ->pluck('snorkeling_package_id');
+
+        $destinationIds = Reservation::query()
+            ->whereIn('id', Review::query()
+                ->where('status', 'published')
+                ->whereNotNull('reservation_id')
+                ->distinct()
+                ->pluck('reservation_id'))
+            ->whereNotNull('destination_id')
+            ->distinct()
+            ->pluck('destination_id');
+
         return view('reviews.index', [
-            'reviews' => Review::with(['user', 'package'])->where('status', 'published')->latest()->get(),
+            'reviews' => Review::with(['user', 'package', 'reservation.destination'])
+                ->where('status', 'published')
+                ->when($filters['package'], fn ($query, $packageId) => $query->where('snorkeling_package_id', $packageId))
+                ->when($filters['destination'], fn ($query, $destinationId) => $query->whereHas('reservation', fn ($reservationQuery) => $reservationQuery->where('destination_id', $destinationId)))
+                ->when($filters['rating'] !== 'all', fn ($query) => $query->where('rating', (int) $filters['rating']))
+                ->when($filters['order'] === 'oldest', fn ($query) => $query->oldest(), fn ($query) => $query->latest())
+                ->get(),
+            'packages' => SnorkelingPackage::query()
+                ->whereIn('id', $packageIds)
+                ->orderBy('name')
+                ->get(['id', 'name']),
+            'destinations' => Destination::query()
+                ->whereIn('id', $destinationIds)
+                ->orderBy('name')
+                ->get(['id', 'name']),
+            'filters' => $filters,
         ]);
     }
 
