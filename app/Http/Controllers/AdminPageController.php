@@ -525,9 +525,35 @@ class AdminPageController extends Controller
             ->with('status', 'Verifikasi pembayaran berhasil diperbarui.');
     }
 
-    public function reviews()
+    public function reviews(Request $request)
     {
-        return view('admin.reviews.index', ['reviews' => Review::with(['user', 'package'])->latest()->get()]);
+        $validated = $request->validate([
+            'customer' => ['nullable', 'string', 'max:255'],
+            'package' => ['nullable', 'string', 'max:255'],
+            'date' => ['nullable', 'date_format:Y-m-d'],
+            'status' => ['nullable', Rule::in(['all', 'draft', 'published', 'hidden'])],
+        ]);
+
+        $customer = trim($validated['customer'] ?? '');
+        $package = trim($validated['package'] ?? '');
+        $date = $validated['date'] ?? '';
+        $status = $validated['status'] ?? 'all';
+
+        return view('admin.reviews.index', [
+            'reviews' => Review::with(['user', 'package'])
+                ->when($customer !== '', fn ($query) => $query->whereHas('user', fn ($userQuery) => $userQuery->where('name', 'like', "%{$customer}%")))
+                ->when($package !== '', fn ($query) => $query->whereHas('package', fn ($packageQuery) => $packageQuery->where('name', 'like', "%{$package}%")))
+                ->when($date !== '', fn ($query) => $query->whereDate('created_at', $date))
+                ->when($status !== 'all', fn ($query) => $query->where('status', $status))
+                ->latest()
+                ->get(),
+            'filters' => [
+                'customer' => $customer,
+                'package' => $package,
+                'date' => $date,
+                'status' => $status,
+            ],
+        ]);
     }
 
     public function reviewShow(Review $review)
@@ -555,9 +581,23 @@ class AdminPageController extends Controller
             ->with('status', 'Review berhasil dihapus.');
     }
 
-    public function complaints()
+    public function complaints(Request $request)
     {
-        return view('admin.complaints.index', ['complaints' => Complaint::with('user')->latest()->get()]);
+        $validated = $request->validate([
+            'status' => ['nullable', Rule::in(['all', 'baru', 'diproses', 'selesai'])],
+        ]);
+
+        $status = $validated['status'] ?? 'all';
+
+        return view('admin.complaints.index', [
+            'complaints' => Complaint::with('user')
+                ->when($status !== 'all', fn ($query) => $query->where('status', $status))
+                ->latest()
+                ->get(),
+            'filters' => [
+                'status' => $status,
+            ],
+        ]);
     }
 
     public function complaintShow(Complaint $complaint)

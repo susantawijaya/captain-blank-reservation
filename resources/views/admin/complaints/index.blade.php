@@ -3,6 +3,22 @@
 @section('title', 'Pesan Masuk')
 
 @section('content')
+<div class="card" style="margin-bottom: 16px;">
+    <div class="card-body">
+        <form class="form-grid" method="GET" action="{{ route('admin.complaints.index') }}" data-auto-filter-form data-auto-submit-delay="200">
+            <div class="field">
+                <label for="status">Filter status</label>
+                <select id="status" name="status" data-auto-filter-change>
+                    <option value="all" @selected(($filters['status'] ?? 'all') === 'all')>Semua status</option>
+                    <option value="baru" @selected(($filters['status'] ?? 'all') === 'baru')>Baru</option>
+                    <option value="diproses" @selected(($filters['status'] ?? 'all') === 'diproses')>Diproses</option>
+                    <option value="selesai" @selected(($filters['status'] ?? 'all') === 'selesai')>Selesai</option>
+                </select>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="table-wrap">
     <table>
         <thead>

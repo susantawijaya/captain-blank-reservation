@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Destination;
 use App\Models\Faq;
 use App\Models\GalleryItem;
+use App\Models\Complaint;
 use App\Models\Payment;
 use App\Models\Reservation;
 use App\Models\Review;
@@ -513,6 +514,97 @@ class AdminCrudTest extends TestCase
         $response->assertOk();
         $response->assertSee('Santa Customer');
         $response->assertDontSee('Xander Customer');
+    }
+
+    public function test_admin_can_filter_reviews_by_customer_package_date_and_status(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $matchingReservation = $this->createReservation('selesai');
+        $matchingReservation->user->update(['name' => 'Santa']);
+        $matchingReservation->package->update([
+            'name' => 'Lembongan Morning Escape',
+            'slug' => 'review-package-match',
+        ]);
+
+        $matchingReview = Review::query()->create([
+            'reservation_id' => $matchingReservation->id,
+            'user_id' => $matchingReservation->user_id,
+            'snorkeling_package_id' => $matchingReservation->snorkeling_package_id,
+            'rating' => 5,
+            'comment' => 'Review yang harus tampil.',
+            'status' => 'published',
+        ]);
+        $matchingReview->timestamps = false;
+        $matchingReview->created_at = now()->subDays(2)->setTime(10, 0);
+        $matchingReview->updated_at = now()->subDays(2)->setTime(10, 0);
+        $matchingReview->save();
+
+        $otherReservation = $this->createReservation('selesai');
+        $otherReservation->user->update(['name' => 'Xander']);
+        $otherReservation->package->update([
+            'name' => 'Adventure Reef Run',
+            'slug' => 'review-package-other',
+        ]);
+
+        $otherReview = Review::query()->create([
+            'reservation_id' => $otherReservation->id,
+            'user_id' => $otherReservation->user_id,
+            'snorkeling_package_id' => $otherReservation->snorkeling_package_id,
+            'rating' => 4,
+            'comment' => 'Review yang tidak boleh tampil.',
+            'status' => 'hidden',
+        ]);
+        $otherReview->timestamps = false;
+        $otherReview->created_at = now()->setTime(9, 30);
+        $otherReview->updated_at = now()->setTime(9, 30);
+        $otherReview->save();
+
+        $response = $this->actingAs($admin)->get(route('admin.reviews.index', [
+            'customer' => 'Santa',
+            'package' => 'Morning Escape',
+            'date' => now()->subDays(2)->toDateString(),
+            'status' => 'published',
+        ]));
+
+        $response->assertOk();
+        $response->assertSee('Review yang harus tampil.');
+        $response->assertDontSee('Review yang tidak boleh tampil.');
+    }
+
+    public function test_admin_can_filter_complaints_by_status(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $customer = User::factory()->create([
+            'role' => 'customer',
+        ]);
+
+        Complaint::query()->create([
+            'user_id' => $customer->id,
+            'subject' => 'Pesan baru',
+            'message' => 'Pesan yang masih baru.',
+            'status' => 'baru',
+        ]);
+
+        Complaint::query()->create([
+            'user_id' => $customer->id,
+            'subject' => 'Pesan selesai',
+            'message' => 'Pesan yang sudah selesai.',
+            'status' => 'selesai',
+        ]);
+
+        $response = $this->actingAs($admin)->get(route('admin.complaints.index', [
+            'status' => 'baru',
+        ]));
+
+        $response->assertOk();
+        $response->assertSee('Pesan baru');
+        $response->assertDontSee('Pesan selesai');
     }
 
     private function createReservation(string $status = 'menunggu_verifikasi'): Reservation
