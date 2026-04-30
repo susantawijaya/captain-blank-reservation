@@ -23,7 +23,21 @@
             </div>
             <div class="field">
                 <label for="proof_image">Bukti Transfer</label>
-                <input id="proof_image" name="proof_image" type="file" accept="image/*" required>
+                <input
+                    id="proof_image"
+                    name="proof_image"
+                    type="file"
+                    accept="image/*"
+                    required
+                    data-image-preview-input
+                    data-image-preview-target="payment-proof-preview"
+                    data-image-preview-name="payment-proof-preview-name"
+                >
+                <div class="upload-preview" id="payment-proof-preview" data-image-preview-wrapper hidden>
+                    <p class="upload-preview-label">Preview bukti transfer</p>
+                    <img class="upload-preview-image" data-image-preview-image alt="Preview bukti transfer">
+                    <p class="upload-preview-name" id="payment-proof-preview-name" data-image-preview-filename></p>
+                </div>
                 @error('proof_image')
                     <p class="mt-2 text-sm font-medium text-red-600">{{ $message }}</p>
                 @enderror
