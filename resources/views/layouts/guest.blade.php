@@ -20,6 +20,7 @@
     @endif
     <link rel="stylesheet" href="{{ asset('css/captain-blank.css') }}">
     <script defer src="{{ asset('js/password-ui.js') }}"></script>
+    <script defer src="{{ asset('js/flash-toast.js') }}"></script>
 </head>
 <body class="site-background text-slate-900" style="--page-hero-image: url('{{ $pageHeroImage }}');">
     <main class="section auth-shell-section">

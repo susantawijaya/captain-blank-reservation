@@ -91,6 +91,11 @@ a {
 }
 
 .flash-toast {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 12px;
     padding: 16px 18px;
     border: 1px solid rgba(216, 233, 244, 0.96);
     border-radius: 22px;
@@ -99,6 +104,11 @@ a {
     backdrop-filter: blur(18px);
     pointer-events: auto;
     animation: flash-toast-enter 0.26s ease;
+    transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.flash-toast-copy {
+    min-width: 0;
 }
 
 .flash-toast strong {
@@ -114,6 +124,43 @@ a {
     margin: 8px 0 0;
     font-size: 0.95rem;
     line-height: 1.6;
+}
+
+.flash-toast-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    margin: -4px -6px 0 0;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    color: currentColor;
+    font-size: 1.1rem;
+    line-height: 1;
+    background: transparent;
+    box-shadow: none;
+    cursor: pointer;
+    opacity: 0.72;
+    transition: background-color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+
+.flash-toast-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    opacity: 1;
+    transform: scale(1.04);
+}
+
+.flash-toast-close:focus-visible {
+    outline: 3px solid rgba(15, 122, 169, 0.18);
+    outline-offset: 2px;
+}
+
+.flash-toast.is-hiding {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+    pointer-events: none;
 }
 
 .flash-toast-success {

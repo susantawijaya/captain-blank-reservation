@@ -206,6 +206,32 @@ class AdminCrudTest extends TestCase
         ]);
     }
 
+    public function test_admin_dashboard_displays_reservation_counts_by_status(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $this->createReservation('menunggu_verifikasi');
+        $this->createReservation('terkonfirmasi');
+        $this->createReservation('menunggu_pembayaran');
+        $this->createReservation('selesai');
+
+        $response = $this->actingAs($admin)->get(route('admin.dashboard'));
+
+        $response->assertOk();
+        $response->assertSeeTextInOrder([
+            'Total Reservasi',
+            '4',
+            'Menunggu Konfirmasi',
+            '1',
+            'Terkonfirmasi',
+            '1',
+            'Menunggu Bayar',
+            '1',
+        ]);
+    }
+
     public function test_admin_can_verify_payment_and_sync_reservation_status(): void
     {
         $admin = User::factory()->create([
@@ -368,15 +394,17 @@ class AdminCrudTest extends TestCase
         $response->assertSee('Penuh');
     }
 
-    private function createReservation(): Reservation
+    private function createReservation(string $status = 'menunggu_verifikasi'): Reservation
     {
+        $sequence = Reservation::count() + 1;
+
         $customer = User::factory()->create([
             'role' => 'customer',
         ]);
 
         $package = SnorkelingPackage::query()->create([
-            'name' => 'Paket Tes',
-            'slug' => 'paket-tes',
+            'name' => 'Paket Tes '.$sequence,
+            'slug' => 'paket-tes-'.$sequence,
             'short_description' => 'Tes',
             'description' => 'Deskripsi tes',
             'price' => 250000,
@@ -386,7 +414,7 @@ class AdminCrudTest extends TestCase
         ]);
 
         return Reservation::query()->create([
-            'code' => 'RSV-001',
+            'code' => 'RSV-'.str_pad((string) $sequence, 3, '0', STR_PAD_LEFT),
             'user_id' => $customer->id,
             'snorkeling_package_id' => $package->id,
             'booking_date' => now()->toDateString(),
@@ -395,7 +423,7 @@ class AdminCrudTest extends TestCase
             'contact_phone' => '08123456789',
             'pickup_location' => 'Pelabuhan',
             'total_price' => 250000,
-            'status' => 'menunggu_verifikasi',
+            'status' => $status,
         ]);
     }
 }

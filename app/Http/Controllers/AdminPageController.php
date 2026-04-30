@@ -26,9 +26,9 @@ class AdminPageController extends Controller
     {
         return view('admin.dashboard.index', [
             'reservationCount' => Reservation::count(),
-            'pendingPayments' => Payment::where('status', 'menunggu_verifikasi')->count(),
+            'waitingConfirmationReservations' => Reservation::where('status', 'menunggu_verifikasi')->count(),
             'confirmedReservations' => Reservation::where('status', 'terkonfirmasi')->count(),
-            'reviewCount' => Review::count(),
+            'waitingPaymentReservations' => Reservation::where('status', 'menunggu_pembayaran')->count(),
             'recentReservations' => Reservation::with(['user', 'package', 'payment'])->latest()->take(6)->get(),
         ]);
     }

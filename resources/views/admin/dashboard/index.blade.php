@@ -11,9 +11,9 @@
 
 <div class="stats-grid">
     <x-stat-card label="Total Reservasi" :value="$reservationCount" />
-    <x-stat-card label="Menunggu Bayar" :value="$pendingPayments" />
+    <x-stat-card label="Menunggu Konfirmasi" :value="$waitingConfirmationReservations" />
     <x-stat-card label="Terkonfirmasi" :value="$confirmedReservations" />
-    <x-stat-card label="Review" :value="$reviewCount" />
+    <x-stat-card label="Menunggu Bayar" :value="$waitingPaymentReservations" />
 </div>
 <div class="card"><div class="card-body">
     <div class="section-head mb-5">

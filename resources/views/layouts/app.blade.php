@@ -33,6 +33,7 @@
     <script defer src="{{ asset('js/password-ui.js') }}"></script>
     <script defer src="{{ asset('js/filter-auto-submit.js') }}"></script>
     <script defer src="{{ asset('js/image-preview.js') }}"></script>
+    <script defer src="{{ asset('js/flash-toast.js') }}"></script>
 </head>
 <body class="site-background text-slate-900" style="--page-hero-image: url('{{ $pageHeroImage }}');">
     @include('navbar')
