@@ -19,8 +19,8 @@
     body.site-background {
         min-height: 100vh;
         background:
-            linear-gradient(180deg, rgba(244, 247, 251, 0.9), rgba(244, 247, 251, 0.96)),
-            var(--page-hero-image, var(--site-hero-image)) center / cover fixed no-repeat;
+            radial-gradient(circle at top left, rgba(17, 183, 166, 0.12), transparent 26%),
+            linear-gradient(180deg, rgba(244, 247, 251, 0.96), rgba(244, 247, 251, 0.98));
     }
 
     a {
