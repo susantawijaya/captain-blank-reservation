@@ -23,6 +23,7 @@
 
 html {
     scroll-behavior: smooth;
+    font-family: var(--site-font);
 }
 
 body {
@@ -32,6 +33,7 @@ body {
         radial-gradient(circle at top left, rgba(17, 183, 166, 0.16), transparent 24%),
         linear-gradient(180deg, #eef6fb 0%, #f9fcff 100%);
     font-family: var(--site-font);
+    font-weight: 400;
 }
 
 body,
@@ -39,11 +41,23 @@ body :is(h1, h2, h3, h4, h5, h6, p, a, span, small, li, dt, dd, th, td, label, b
     font-family: var(--site-font);
 }
 
-body :is(.font-medium, .font-semibold, .font-bold, .font-black) {
+body :is(h1, h2, h3, h4, h5, h6) {
     font-weight: 700 !important;
 }
 
-body .font-normal {
+body :is(strong, b, th, dt, label, button) {
+    font-weight: 700;
+}
+
+body :is(.brand, .brand *, .nav-links, .nav-links a, .button, .eyebrow, .customer-nav a, .sidebar-brand-subtitle) {
+    font-weight: 700;
+}
+
+body :is(.font-medium, .font-semibold, .font-bold, .font-black, .font-extrabold) {
+    font-weight: 700 !important;
+}
+
+body :is(.font-light, .font-normal) {
     font-weight: 400 !important;
 }
 
@@ -1334,7 +1348,7 @@ tbody tr:hover td {
 
 .customer-nav-strip {
     overflow-x: auto;
-    padding: 2px 0 8px;
+    padding: 8px 0 24px;
 }
 
 .customer-nav {

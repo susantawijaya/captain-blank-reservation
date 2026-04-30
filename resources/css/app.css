@@ -38,7 +38,7 @@
     }
 
     .brand {
-        @apply inline-flex items-center gap-3 text-lg font-black tracking-tight text-slate-950;
+        @apply inline-flex items-center gap-3 text-lg font-bold tracking-tight text-slate-950;
     }
 
     .brand-logo {
@@ -46,11 +46,11 @@
     }
 
     .brand-mark {
-        @apply grid h-11 w-11 place-items-center rounded-lg bg-gradient-to-br from-sky-700 to-teal-500 text-sm font-black text-white shadow-lg shadow-sky-900/20;
+        @apply grid h-11 w-11 place-items-center rounded-lg bg-gradient-to-br from-sky-700 to-teal-500 text-sm font-bold text-white shadow-lg shadow-sky-900/20;
     }
 
     .nav-links {
-        @apply flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-semibold text-slate-600;
+        @apply flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-bold text-slate-600;
     }
 
     .nav-links a {
@@ -91,12 +91,12 @@
     }
 
     .eyebrow {
-        @apply mb-4 inline-flex rounded-full border border-cyan-200/40 bg-cyan-100/15 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-cyan-100;
+        @apply mb-4 inline-flex rounded-full border border-cyan-200/40 bg-cyan-100/15 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-cyan-100;
     }
 
     .hero h1,
     .page-header h1 {
-        @apply m-0 text-5xl font-black leading-none tracking-tight md:text-7xl;
+        @apply m-0 text-5xl font-bold leading-none tracking-tight md:text-7xl;
     }
 
     .hero p,
@@ -121,7 +121,7 @@
     }
 
     .section-head h2 {
-        @apply m-0 text-3xl font-black tracking-tight text-slate-950 md:text-4xl;
+        @apply m-0 text-3xl font-bold tracking-tight text-slate-950 md:text-4xl;
     }
 
     .section-head p {
@@ -169,7 +169,7 @@
     }
 
     .package-card-title {
-        @apply flex min-h-[3.75rem] items-start text-xl font-black text-slate-950;
+        @apply flex min-h-[3.75rem] items-start text-xl font-bold text-slate-950;
     }
 
     .package-card-description {
@@ -193,7 +193,7 @@
     }
 
     .image-placeholder {
-        @apply grid min-h-48 place-items-center bg-gradient-to-br from-sky-800 via-sky-600 to-teal-500 p-6 text-center text-lg font-black text-sky-50;
+        @apply grid min-h-48 place-items-center bg-gradient-to-br from-sky-800 via-sky-600 to-teal-500 p-6 text-center text-lg font-bold text-sky-50;
     }
 
     .schedule-list {
@@ -229,11 +229,11 @@
     }
 
     .price {
-        @apply text-2xl font-black text-sky-900;
+        @apply text-2xl font-bold text-sky-900;
     }
 
     .badge {
-        @apply inline-flex min-h-7 items-center rounded-full bg-slate-100 px-3 text-xs font-black capitalize text-slate-600;
+        @apply inline-flex min-h-7 items-center rounded-full bg-slate-100 px-3 text-xs font-bold capitalize text-slate-600;
     }
 
     .badge.success {
@@ -262,7 +262,7 @@
     }
 
     th {
-        @apply bg-slate-50 text-xs font-black uppercase tracking-wide text-slate-500;
+        @apply bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500;
     }
 
     .form-grid {
@@ -274,7 +274,7 @@
     }
 
     .field label {
-        @apply mb-2 block text-sm font-black text-slate-700;
+        @apply mb-2 block text-sm font-bold text-slate-700;
     }
 
     .field input,
@@ -344,7 +344,7 @@
     }
 
     .stat-card strong {
-        @apply mt-2 block text-3xl font-black text-sky-900;
+        @apply mt-2 block text-3xl font-bold text-sky-900;
     }
 }
 
