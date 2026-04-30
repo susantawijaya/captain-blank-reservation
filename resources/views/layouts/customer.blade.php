@@ -78,12 +78,14 @@
     <section class="section customer-shell-section">
         <div class="container customer-shell">
             <div class="customer-nav-strip">
-                <nav class="customer-nav">
-                    @foreach ($customerNavItems as $item)
-                        @php($isActive = collect($item['patterns'])->contains(fn ($pattern) => request()->routeIs($pattern)))
-                        <a class="{{ $isActive ? 'is-active' : '' }}" href="{{ $item['route'] }}" @if($isActive) aria-current="page" @endif>{{ $item['label'] }}</a>
-                    @endforeach
-                </nav>
+                <div class="customer-nav-scroll">
+                    <nav class="customer-nav">
+                        @foreach ($customerNavItems as $item)
+                            @php($isActive = collect($item['patterns'])->contains(fn ($pattern) => request()->routeIs($pattern)))
+                            <a class="{{ $isActive ? 'is-active' : '' }}" href="{{ $item['route'] }}" @if($isActive) aria-current="page" @endif>{{ $item['label'] }}</a>
+                        @endforeach
+                    </nav>
+                </div>
             </div>
             <div class="customer-main">
                 @yield('customer_content')

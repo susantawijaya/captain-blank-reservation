@@ -1347,8 +1347,12 @@ tbody tr:hover td {
 }
 
 .customer-nav-strip {
+    overflow: visible;
+}
+
+.customer-nav-scroll {
     overflow-x: auto;
-    padding: 8px 0 24px;
+    padding: 6px 0 28px;
 }
 
 .customer-nav {
