@@ -9,15 +9,26 @@
 <div class="card" style="margin-bottom: 24px;">
     <div class="card-body">
         <form class="form-grid" method="GET" action="{{ route('admin.schedules.index') }}" data-auto-filter-form data-auto-submit-delay="200">
-            <div class="field">
-                <label for="schedule_order">Urutkan Jadwal Berdasarkan</label>
-                <select id="schedule_order" name="schedule_order" data-auto-filter-change>
-                    <option value="package" @selected(($filters['schedule_order'] ?? 'date') === 'package')>Nama Paket</option>
-                    <option value="date" @selected(($filters['schedule_order'] ?? 'date') === 'date')>Tanggal</option>
-                    <option value="time" @selected(($filters['schedule_order'] ?? 'date') === 'time')>Jam</option>
-                    <option value="availability" @selected(($filters['schedule_order'] ?? 'date') === 'availability')>Ketersediaan</option>
-                </select>
-                <p class="mt-2 text-sm text-slate-600">Pilih satu mode urutan agar tabel langsung disusun ulang tanpa memenuhi area filter.</p>
+            <div class="grid gap-4 md:grid-cols-3">
+                <div class="field">
+                    <label for="q">Cari berdasarkan paket</label>
+                    <input id="q" name="q" type="text" value="{{ $filters['q'] ?? '' }}" placeholder="Contoh: Lembongan Morning Escape" data-auto-filter-input>
+                </div>
+                <div class="field">
+                    <label for="date">Cari berdasarkan tanggal</label>
+                    <input id="date" name="date" type="date" value="{{ $filters['date'] ?? '' }}" data-auto-filter-change>
+                </div>
+                <div class="field">
+                    <label for="status">Cari berdasarkan status</label>
+                    <select id="status" name="status" data-auto-filter-change>
+                        <option value="all" @selected(($filters['status'] ?? 'all') === 'all')>Semua status</option>
+                        <option value="tersedia" @selected(($filters['status'] ?? 'all') === 'tersedia')>Tersedia</option>
+                        <option value="penuh" @selected(($filters['status'] ?? 'all') === 'penuh')>Penuh</option>
+                        <option value="selesai" @selected(($filters['status'] ?? 'all') === 'selesai')>Selesai</option>
+                        <option value="batal_cuaca" @selected(($filters['status'] ?? 'all') === 'batal_cuaca')>Batal Cuaca</option>
+                        <option value="reschedule" @selected(($filters['status'] ?? 'all') === 'reschedule')>Reschedule</option>
+                    </select>
+                </div>
             </div>
         </form>
     </div>

@@ -1,6 +1,6 @@
 <div class="card" style="margin-bottom: 20px;">
     <div class="card-body">
-        <form class="form-grid" method="GET" action="{{ route('destinations.index') }}" data-auto-filter-form data-auto-submit-delay="300">
+        <form class="form-grid" method="GET" action="{{ route('destinations.index') }}" data-auto-filter-form data-auto-submit-delay="200">
             <div class="form-grid two">
                 <div class="field">
                     <label for="q">Cari destinasi</label>

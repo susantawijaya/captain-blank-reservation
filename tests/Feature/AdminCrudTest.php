@@ -325,73 +325,63 @@ class AdminCrudTest extends TestCase
         ]);
     }
 
-    public function test_admin_can_reorder_schedules_using_single_schedule_order_filter(): void
+    public function test_admin_can_filter_schedules_by_package_date_and_status(): void
     {
         $admin = User::factory()->create([
             'role' => 'admin',
         ]);
 
-        $alphaPackage = SnorkelingPackage::query()->create([
-            'name' => 'Alpha Morning',
-            'slug' => 'alpha-morning',
+        $matchingPackage = SnorkelingPackage::query()->create([
+            'name' => 'Lembongan Morning Escape',
+            'slug' => 'lembongan-morning-escape',
             'short_description' => 'Trip pagi',
-            'description' => 'Trip pagi untuk pengujian urutan.',
-            'price' => 400000,
+            'description' => 'Trip pagi yang cocok untuk pengujian filter.',
+            'price' => 450000,
             'duration' => '4 jam',
             'capacity' => 8,
             'status' => 'aktif',
         ]);
 
-        $zetaPackage = SnorkelingPackage::query()->create([
-            'name' => 'Zeta Sunset',
-            'slug' => 'zeta-sunset',
-            'short_description' => 'Trip sore',
-            'description' => 'Trip sore untuk pengujian urutan.',
-            'price' => 500000,
+        $otherPackage = SnorkelingPackage::query()->create([
+            'name' => 'Adventure Reef Run',
+            'slug' => 'adventure-reef-run',
+            'short_description' => 'Trip siang',
+            'description' => 'Trip siang yang tidak boleh lolos filter.',
+            'price' => 520000,
             'duration' => '4 jam',
             'capacity' => 8,
             'status' => 'aktif',
         ]);
 
         Schedule::query()->create([
-            'snorkeling_package_id' => $zetaPackage->id,
-            'start_at' => now()->addDays(3)->setTime(14, 0),
-            'end_at' => now()->addDays(3)->setTime(18, 0),
+            'snorkeling_package_id' => $matchingPackage->id,
+            'start_at' => now()->addDays(5)->setTime(8, 0),
+            'end_at' => now()->addDays(5)->setTime(12, 0),
             'capacity' => 8,
-            'boat_count' => 2,
-            'booked_count' => 2,
+            'boat_count' => 3,
+            'booked_count' => 0,
+            'status' => 'tersedia',
+        ]);
+
+        Schedule::query()->create([
+            'snorkeling_package_id' => $otherPackage->id,
+            'start_at' => now()->addDays(5)->setTime(9, 0),
+            'end_at' => now()->addDays(5)->setTime(13, 0),
+            'capacity' => 8,
+            'boat_count' => 3,
+            'booked_count' => 3,
             'status' => 'penuh',
         ]);
 
-        Schedule::query()->create([
-            'snorkeling_package_id' => $alphaPackage->id,
-            'start_at' => now()->addDays(1)->setTime(8, 0),
-            'end_at' => now()->addDays(1)->setTime(12, 0),
-            'capacity' => 8,
-            'boat_count' => 3,
-            'booked_count' => 1,
-            'status' => 'tersedia',
-        ]);
-
-        Schedule::query()->create([
-            'snorkeling_package_id' => $alphaPackage->id,
-            'start_at' => now()->addDays(2)->setTime(10, 0),
-            'end_at' => now()->addDays(2)->setTime(14, 0),
-            'capacity' => 8,
-            'boat_count' => 2,
-            'booked_count' => 1,
-            'status' => 'tersedia',
-        ]);
-
         $response = $this->actingAs($admin)->get(route('admin.schedules.index', [
-            'schedule_order' => 'availability',
+            'q' => 'Lembongan Morning',
+            'date' => now()->addDays(5)->toDateString(),
+            'status' => 'tersedia',
         ]));
 
         $response->assertOk();
-        $response->assertSee('Alpha Morning');
-        $response->assertSee('Hampir Penuh');
-        $response->assertSee('Zeta Sunset');
-        $response->assertSee('Penuh');
+        $response->assertSee('Lembongan Morning Escape');
+        $response->assertDontSee('Adventure Reef Run');
     }
 
     private function createReservation(string $status = 'menunggu_verifikasi'): Reservation

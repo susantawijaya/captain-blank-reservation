@@ -202,51 +202,33 @@ class AdminPageController extends Controller
     public function schedules(Request $request)
     {
         $validated = $request->validate([
-            'schedule_order' => ['nullable', Rule::in(['package', 'date', 'time', 'availability'])],
+            'q' => ['nullable', 'string', 'max:255'],
+            'date' => ['nullable', 'date_format:Y-m-d'],
+            'status' => ['nullable', Rule::in(['all', 'tersedia', 'penuh', 'selesai', 'batal_cuaca', 'reschedule'])],
         ]);
 
-        $scheduleOrder = $validated['schedule_order'] ?? 'date';
+        $keyword = trim($validated['q'] ?? '');
+        $date = $validated['date'] ?? '';
+        $status = $validated['status'] ?? 'all';
 
         $schedules = Schedule::query()
             ->select('schedules.*')
             ->join('snorkeling_packages', 'snorkeling_packages.id', '=', 'schedules.snorkeling_package_id')
             ->with('package')
-            ->when($scheduleOrder === 'package', function ($query) {
-                $query
-                    ->orderBy('snorkeling_packages.name')
-                    ->orderBy('schedules.start_at');
-            })
-            ->when($scheduleOrder === 'date', function ($query) {
-                $query
-                    ->orderByRaw('DATE(schedules.start_at) asc')
-                    ->orderByRaw('TIME(schedules.start_at) asc')
-                    ->orderBy('snorkeling_packages.name');
-            })
-            ->when($scheduleOrder === 'time', function ($query) {
-                $query
-                    ->orderByRaw('TIME(schedules.start_at) asc')
-                    ->orderByRaw('DATE(schedules.start_at) asc')
-                    ->orderBy('snorkeling_packages.name');
-            })
-            ->when($scheduleOrder === 'availability', function ($query) {
-                $query
-                    ->orderByRaw("
-                        CASE
-                            WHEN schedules.status = 'tersedia' AND (schedules.boat_count - schedules.booked_count) > 1 THEN 1
-                            WHEN schedules.status = 'tersedia' AND (schedules.boat_count - schedules.booked_count) = 1 THEN 2
-                            ELSE 3
-                        END asc
-                    ")
-                    ->orderByRaw('DATE(schedules.start_at) asc')
-                    ->orderByRaw('TIME(schedules.start_at) asc')
-                    ->orderBy('snorkeling_packages.name');
-            })
+            ->when($keyword !== '', fn ($query) => $query->where('snorkeling_packages.name', 'like', "%{$keyword}%"))
+            ->when($date !== '', fn ($query) => $query->whereDate('schedules.start_at', $date))
+            ->when($status !== 'all', fn ($query) => $query->where('schedules.status', $status))
+            ->orderByRaw('DATE(schedules.start_at) asc')
+            ->orderByRaw('TIME(schedules.start_at) asc')
+            ->orderBy('snorkeling_packages.name')
             ->get();
 
         return view('admin.schedules.index', [
             'schedules' => $schedules,
             'filters' => [
-                'schedule_order' => $scheduleOrder,
+                'q' => $keyword,
+                'date' => $date,
+                'status' => $status,
             ],
         ]);
     }

@@ -1,10 +1,14 @@
 <div class="card" style="margin-bottom: 20px;">
     <div class="card-body">
-        <form class="form-grid" method="GET" action="{{ route('packages.index') }}" data-auto-filter-form data-auto-submit-delay="300">
+        <form class="form-grid" method="GET" action="{{ route('packages.index') }}" data-auto-filter-form data-auto-submit-delay="200">
             @if(!empty($filters['destination']))
                 <input type="hidden" name="destination" value="{{ $filters['destination'] }}">
             @endif
             <div class="grid gap-4 lg:grid-cols-5">
+                <div class="field">
+                    <label for="q">Cari paket</label>
+                    <input id="q" name="q" type="text" value="{{ $filters['q'] ?? '' }}" placeholder="Contoh: Snorkeling Pagi" data-auto-filter-input>
+                </div>
                 <div class="field">
                     <label for="date">Tanggal Reservasi</label>
                     <input id="date" name="date" type="date" min="{{ now()->toDateString() }}" value="{{ $filters['date'] ?? '' }}" data-auto-filter-change>
@@ -16,10 +20,6 @@
                 <div class="field">
                     <label for="child_count">Anak</label>
                     <input id="child_count" name="child_count" type="number" min="0" max="50" value="{{ $filters['child_count'] ?? 0 }}" data-auto-filter-change>
-                </div>
-                <div class="field">
-                    <label for="q">Cari paket</label>
-                    <input id="q" name="q" type="text" value="{{ $filters['q'] ?? '' }}" placeholder="Contoh: Snorkeling Pagi" data-auto-filter-input>
                 </div>
                 <div class="field">
                     <label for="price_range">Filter harga</label>
