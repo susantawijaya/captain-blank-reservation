@@ -35,15 +35,9 @@
 </head>
 <body class="site-background text-slate-900" style="--page-hero-image: url('{{ $pageHeroImage }}');">
     @include('navbar')
+    @include('partials.flash')
 
     <main>
-        @if (session('status') || session('auth_error') || session('error'))
-            <section class="section" style="padding-bottom: 0;">
-                <div class="container">
-                    @include('partials.flash')
-                </div>
-            </section>
-        @endif
         @yield('content')
     </main>
 

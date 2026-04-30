@@ -1,11 +1,17 @@
-@if (session('status'))
-    <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-700">
-        {{ session('status') }}
-    </div>
-@endif
+@if (session('status') || session('auth_error') || session('error'))
+    <div class="flash-stack" aria-live="polite" aria-atomic="true">
+        @if (session('status'))
+            <div class="flash-toast flash-toast-success" role="status">
+                <strong>Berhasil</strong>
+                <p>{{ session('status') }}</p>
+            </div>
+        @endif
 
-@if (session('auth_error') || session('error'))
-    <div class="@if(session('status')) mt-3 @endif rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">
-        {{ session('auth_error') ?? session('error') }}
+        @if (session('auth_error') || session('error'))
+            <div class="flash-toast flash-toast-error" role="alert">
+                <strong>Perhatian</strong>
+                <p>{{ session('auth_error') ?? session('error') }}</p>
+            </div>
+        @endif
     </div>
 @endif

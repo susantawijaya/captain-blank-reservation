@@ -66,6 +66,77 @@ a {
     text-decoration: none;
 }
 
+.flash-stack {
+    position: fixed;
+    top: clamp(18px, 3vw, 28px);
+    right: clamp(18px, 3vw, 28px);
+    z-index: 120;
+    display: grid;
+    gap: 12px;
+    width: min(380px, calc(100vw - 32px));
+    pointer-events: none;
+}
+
+.flash-toast {
+    padding: 16px 18px;
+    border: 1px solid rgba(216, 233, 244, 0.96);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 24px 60px rgba(8, 38, 61, 0.16);
+    backdrop-filter: blur(18px);
+    pointer-events: auto;
+    animation: flash-toast-enter 0.26s ease;
+}
+
+.flash-toast strong {
+    display: block;
+    margin: 0;
+    font-size: 0.84rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.flash-toast p {
+    margin: 8px 0 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.flash-toast-success {
+    border-color: rgba(134, 239, 172, 0.72);
+    background:
+        linear-gradient(180deg, rgba(240, 253, 244, 0.98), rgba(236, 253, 245, 0.96));
+    color: #166534;
+}
+
+.flash-toast-success strong {
+    color: #15803d;
+}
+
+.flash-toast-error {
+    border-color: rgba(252, 165, 165, 0.72);
+    background:
+        linear-gradient(180deg, rgba(254, 242, 242, 0.98), rgba(255, 241, 242, 0.96));
+    color: #b42318;
+}
+
+.flash-toast-error strong {
+    color: #b91c1c;
+}
+
+@keyframes flash-toast-enter {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
 img {
     display: block;
     max-width: 100%;
