@@ -22,8 +22,8 @@
     </div>
 </section>
 <section class="section">
-    <div class="container grid gap-6 xl:grid-cols-[1.4fr_0.8fr]">
-        <article class="card">
+    <div class="container detail-split-grid grid gap-6 xl:grid-cols-[1.4fr_0.8fr]">
+        <article class="card detail-primary-card">
             <div class="image-placeholder">{{ $package->name }}</div>
             <div class="card-body">
                 <p>{{ $package->description }}</p>
@@ -42,7 +42,7 @@
                 <p>{{ $package->facilities }}</p>
             </div>
         </article>
-        <aside class="card">
+        <aside class="card detail-side-card">
             <div class="card-body">
                 <div class="price">Rp {{ number_format($package->price, 0, ',', '.') }}</div>
                 <p>{{ $package->duration }} | private charter maks. {{ $package->capacity }} orang</p>

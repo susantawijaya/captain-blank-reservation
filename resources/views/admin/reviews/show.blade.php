@@ -3,7 +3,7 @@
 @section('title', 'Detail Review')
 
 @section('content')
-<div class="grid gap-6 xl:grid-cols-[1fr_0.9fr]">
+<div class="detail-split-grid grid gap-6 xl:grid-cols-[1fr_0.9fr]">
     <div class="card">
         <div class="card-body">
             <h1>Review {{ $review->user->name }}</h1>
@@ -30,7 +30,7 @@
                         <p class="mt-2 text-sm font-medium text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
-                <div class="flex flex-wrap gap-3">
+                <div class="detail-action-row flex flex-wrap gap-3">
                     <button class="button primary" type="submit">Simpan Perubahan</button>
                     <button class="button secondary !border-red-200 !text-red-700 hover:!bg-red-50" type="submit" form="delete-review-form">Hapus</button>
                 </div>

@@ -32,14 +32,19 @@
     ];
 @endphp
 
-<aside class="sidebar">
-    <a class="brand brand-inverse" href="{{ route('admin.dashboard') }}">
-        <x-brand-logo />
-        <span>
-            <span class="block">Captain Blank</span>
-            <span class="sidebar-brand-subtitle">Admin Workspace</span>
-        </span>
-    </a>
+<aside class="sidebar" id="adminSidebar" data-admin-sidebar aria-label="Navigasi admin">
+    <div class="sidebar-head">
+        <a class="brand brand-inverse" href="{{ route('admin.dashboard') }}">
+            <x-brand-logo />
+            <span>
+                <span class="block">Captain Blank</span>
+                <span class="sidebar-brand-subtitle">Admin Workspace</span>
+            </span>
+        </a>
+        <button class="sidebar-close" type="button" aria-label="Tutup menu admin" data-admin-sidebar-close>
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 
     @foreach ($navigationGroups as $group)
         <div class="sidebar-group">

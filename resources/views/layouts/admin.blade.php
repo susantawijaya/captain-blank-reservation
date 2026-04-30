@@ -16,9 +16,11 @@
     <script defer src="{{ asset('js/password-ui.js') }}"></script>
     <script defer src="{{ asset('js/filter-auto-submit.js') }}"></script>
     <script defer src="{{ asset('js/flash-toast.js') }}"></script>
+    <script defer src="{{ asset('js/responsive-ui.js') }}"></script>
 </head>
 <body class="site-background admin-body text-slate-900" style="--page-hero-image: url('{{ $pageHeroImage }}');">
-    <div class="admin-shell">
+    <div class="admin-shell" data-admin-shell>
+        <button class="admin-sidebar-backdrop" type="button" aria-label="Tutup menu admin" data-admin-sidebar-backdrop></button>
         @include('admin.partials.sidebar')
         <div class="admin-main">
             @include('admin.partials.topbar')

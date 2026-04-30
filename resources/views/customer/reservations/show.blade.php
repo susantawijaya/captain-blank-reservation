@@ -14,11 +14,11 @@
 @endsection
 
 @section('customer_content')
-<div class="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
+<div class="detail-split-grid grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
         <div class="card">
             <div class="card-body">
                 <h2>Ringkasan Reservasi</h2>
-                <div class="mt-5 grid gap-4 md:grid-cols-2">
+                <div class="detail-meta-grid mt-5 grid gap-4 md:grid-cols-2">
                     <div>
                         <p class="text-sm font-bold uppercase tracking-wide text-slate-500">Status Reservasi</p>
                         <div class="mt-2"><x-status-badge :status="$reservation->status" :label="$reservation->displayStatusLabel()" /></div>
@@ -92,7 +92,7 @@
                 @if($reservation->payment?->proof_image)
                     <div class="mt-6">
                         <p class="text-sm font-bold uppercase tracking-wide text-slate-500">Bukti Pembayaran</p>
-                        <img class="mt-3 w-full rounded-2xl border border-slate-200 object-cover" src="{{ asset($reservation->payment->proof_image) }}" alt="Bukti pembayaran {{ $reservation->code }}">
+                        <img class="detail-proof-image mt-3 w-full rounded-2xl border border-slate-200 object-cover" src="{{ asset($reservation->payment->proof_image) }}" alt="Bukti pembayaran {{ $reservation->code }}">
                     </div>
                 @endif
 
@@ -100,7 +100,7 @@
                     <div class="mt-6 rounded-2xl border border-sky-200 bg-sky-50 p-4 text-sm text-sky-900">
                         Reservasi ini masih bisa diubah atau dihapus karena bukti pembayaran belum dikirim.
                     </div>
-                    <div class="mt-4 flex flex-wrap gap-3">
+                    <div class="detail-action-row mt-4 flex flex-wrap gap-3">
                         <a class="button secondary" href="{{ route('customer.reservations.edit', $reservation) }}">Edit Reservasi</a>
                         <form method="POST" action="{{ route('customer.reservations.destroy', $reservation) }}" onsubmit="return confirm('Hapus reservasi {{ $reservation->code }}?');">
                             @csrf
@@ -116,7 +116,7 @@
             </div>
         </div>
 
-        <div class="grid gap-6">
+        <div class="detail-side-stack grid gap-6">
             @if ($canUploadPayment)
                 <div id="pembayaran">
                     @include('customer.reservations.partials.payment-upload-panel', [

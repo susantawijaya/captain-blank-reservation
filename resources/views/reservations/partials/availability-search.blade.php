@@ -1,6 +1,6 @@
 @php($theme = $theme ?? 'dark')
 @php($isDarkTheme = $theme === 'dark')
-<div class="rounded-2xl p-6 {{ $isDarkTheme ? 'border border-white/20 bg-white/10 backdrop-blur-md' : 'border border-slate-200 bg-white shadow-sm' }}">
+<div class="availability-search-panel rounded-2xl p-6 {{ $isDarkTheme ? 'border border-white/20 bg-white/10 backdrop-blur-md' : 'border border-slate-200 bg-white shadow-sm' }}">
     @if (!empty($heading))
         <span class="text-sm font-bold uppercase tracking-[0.16em] {{ $isDarkTheme ? 'text-cyan-100' : 'text-sky-700' }}">{{ $heading }}</span>
     @endif
@@ -10,7 +10,7 @@
     @if (!empty($description))
         <p class="mt-3 text-sm leading-7 {{ $isDarkTheme ? 'text-sky-50/90' : 'text-slate-600' }}">{{ $description }}</p>
     @endif
-    <form class="mt-5 grid gap-4 md:grid-cols-[1.25fr_0.8fr_0.8fr_auto]" method="GET" action="{{ $action }}">
+    <form class="availability-search-form mt-5 grid gap-4 md:grid-cols-[1.25fr_0.8fr_0.8fr_auto]" method="GET" action="{{ $action }}">
         @foreach(($hiddenFields ?? []) as $hiddenName => $hiddenValue)
             <input type="hidden" name="{{ $hiddenName }}" value="{{ $hiddenValue }}">
         @endforeach
@@ -49,7 +49,7 @@
                 required
             >
         </div>
-        <div class="flex items-end">
+        <div class="availability-search-action flex items-end">
             <button class="button primary w-full md:w-auto" type="submit">{{ $submitLabel ?? 'Check Availability' }}</button>
         </div>
     </form>

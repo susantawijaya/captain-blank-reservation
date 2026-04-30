@@ -402,13 +402,14 @@ class AdminPageController extends Controller
     public function reservations(Request $request)
     {
         $validated = $request->validate([
+            'q' => ['nullable', 'string', 'max:255'],
             'code' => ['nullable', 'string', 'max:255'],
             'customer' => ['nullable', 'string', 'max:255'],
             'package' => ['nullable', 'string', 'max:255'],
             'destination' => ['nullable', 'string', 'max:255'],
         ]);
 
-        $code = trim($validated['code'] ?? '');
+        $code = trim($validated['code'] ?? $validated['q'] ?? '');
         $customer = trim($validated['customer'] ?? '');
         $package = trim($validated['package'] ?? '');
         $destination = trim($validated['destination'] ?? '');

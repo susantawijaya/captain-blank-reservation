@@ -3,7 +3,7 @@
 @section('title', 'Detail Pembayaran')
 
 @section('content')
-<div class="grid gap-6 xl:grid-cols-2">
+<div class="detail-split-grid grid gap-6 xl:grid-cols-2">
     <div class="card">
         <div class="card-body">
             <h1>{{ $payment->reservation->code }}</h1>
@@ -25,7 +25,7 @@
             @if($payment->proof_image)
                 <div class="mt-6">
                     <p class="text-sm font-bold text-slate-700">Bukti Transfer</p>
-                    <img class="mt-3 w-full rounded-2xl border border-slate-200 object-cover" src="{{ asset($payment->proof_image) }}" alt="Bukti pembayaran {{ $payment->reservation->code }}">
+                    <img class="detail-proof-image mt-3 w-full rounded-2xl border border-slate-200 object-cover" src="{{ asset($payment->proof_image) }}" alt="Bukti pembayaran {{ $payment->reservation->code }}">
                 </div>
             @endif
         </div>

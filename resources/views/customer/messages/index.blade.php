@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    <div class="table-wrap">
+    <div class="table-wrap" data-stack-table>
         <table>
             <thead>
                 <tr>
@@ -30,17 +30,17 @@
             <tbody>
                 @forelse($messages as $message)
                     <tr>
-                        <td>{{ $message->subject }}</td>
-                        <td><x-status-badge :status="$message->status" /></td>
-                        <td>
+                        <td data-label="Subjek">{{ $message->subject }}</td>
+                        <td data-label="Status"><x-status-badge :status="$message->status" /></td>
+                        <td data-label="Balasan">
                             @if($message->admin_reply)
                                 <span class="badge">Sudah Dibalas</span>
                             @else
                                 <span class="text-sm text-slate-500">Menunggu balasan</span>
                             @endif
                         </td>
-                        <td>{{ $message->created_at->format('d M Y H:i') }}</td>
-                        <td><a href="{{ route('customer.messages.show', $message) }}">Buka</a></td>
+                        <td data-label="Tanggal">{{ $message->created_at->format('d M Y H:i') }}</td>
+                        <td data-label="Aksi"><a href="{{ route('customer.messages.show', $message) }}">Buka</a></td>
                     </tr>
                 @empty
                     <tr>

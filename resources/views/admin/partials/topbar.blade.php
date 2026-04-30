@@ -19,11 +19,21 @@
 @endphp
 
 <header class="topbar">
-    <div class="topbar-copy">
-        <span class="topbar-kicker">Panel Admin</span>
-        <strong>{{ $pageTitle }}</strong>
-        <p class="topbar-meta">{{ $pageContext }}</p>
-        <div class="topbar-user">{{ $user?->isMasterAdmin() ? 'Master admin' : 'Admin operator' }} - {{ $user?->name }} - {{ $user?->email }}</div>
+    <div class="topbar-leading">
+        <button class="admin-sidebar-toggle" type="button" aria-controls="adminSidebar" aria-expanded="false" aria-label="Buka menu admin" data-admin-sidebar-toggle>
+            <span class="nav-toggle-icon" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+            <span class="nav-toggle-text">Menu</span>
+        </button>
+        <div class="topbar-copy">
+            <span class="topbar-kicker">Panel Admin</span>
+            <strong>{{ $pageTitle }}</strong>
+            <p class="topbar-meta">{{ $pageContext }}</p>
+            <div class="topbar-user">{{ $user?->isMasterAdmin() ? 'Master admin' : 'Admin operator' }} - {{ $user?->name }} - {{ $user?->email }}</div>
+        </div>
     </div>
     <div class="topbar-actions">
         @hasSection('admin_topbar_actions')
