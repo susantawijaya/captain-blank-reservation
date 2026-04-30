@@ -402,22 +402,32 @@ class AdminPageController extends Controller
     public function reservations(Request $request)
     {
         $validated = $request->validate([
-            'q' => ['nullable', 'string', 'max:255'],
-            'status' => ['nullable', 'string'],
+            'code' => ['nullable', 'string', 'max:255'],
+            'customer' => ['nullable', 'string', 'max:255'],
+            'package' => ['nullable', 'string', 'max:255'],
+            'destination' => ['nullable', 'string', 'max:255'],
         ]);
 
-        $status = $validated['status'] ?? 'all';
+        $code = trim($validated['code'] ?? '');
+        $customer = trim($validated['customer'] ?? '');
+        $package = trim($validated['package'] ?? '');
+        $destination = trim($validated['destination'] ?? '');
+
         $reservations = Reservation::with(['user', 'package', 'destination', 'payment'])
-            ->when($validated['q'] ?? null, fn ($query, $keyword) => $query->where('code', 'like', "%{$keyword}%"))
-            ->when($status !== 'all', fn ($query) => $query->where('status', $status))
+            ->when($code !== '', fn ($query) => $query->where('code', 'like', "%{$code}%"))
+            ->when($customer !== '', fn ($query) => $query->whereHas('user', fn ($userQuery) => $userQuery->where('name', 'like', "%{$customer}%")))
+            ->when($package !== '', fn ($query) => $query->whereHas('package', fn ($packageQuery) => $packageQuery->where('name', 'like', "%{$package}%")))
+            ->when($destination !== '', fn ($query) => $query->whereHas('destination', fn ($destinationQuery) => $destinationQuery->where('name', 'like', "%{$destination}%")))
             ->latest()
             ->get();
 
         return view('admin.reservations.index', [
             'reservations' => $reservations,
             'filters' => [
-                'q' => $validated['q'] ?? '',
-                'status' => $status,
+                'code' => $code,
+                'customer' => $customer,
+                'package' => $package,
+                'destination' => $destination,
             ],
         ]);
     }
@@ -450,9 +460,35 @@ class AdminPageController extends Controller
             ->with('status', 'Reservasi berhasil ditandai selesai.');
     }
 
-    public function payments()
+    public function payments(Request $request)
     {
-        return view('admin.payments.index', ['payments' => Payment::with('reservation.user')->latest()->get()]);
+        $validated = $request->validate([
+            'code' => ['nullable', 'string', 'max:255'],
+            'customer' => ['nullable', 'string', 'max:255'],
+            'status' => ['nullable', Rule::in(['all', 'belum_bayar', 'menunggu_verifikasi', 'diterima', 'ditolak'])],
+            'date' => ['nullable', 'date_format:Y-m-d'],
+        ]);
+
+        $code = trim($validated['code'] ?? '');
+        $customer = trim($validated['customer'] ?? '');
+        $status = $validated['status'] ?? 'all';
+        $date = $validated['date'] ?? '';
+
+        return view('admin.payments.index', [
+            'payments' => Payment::with('reservation.user')
+                ->when($code !== '', fn ($query) => $query->whereHas('reservation', fn ($reservationQuery) => $reservationQuery->where('code', 'like', "%{$code}%")))
+                ->when($customer !== '', fn ($query) => $query->whereHas('reservation.user', fn ($userQuery) => $userQuery->where('name', 'like', "%{$customer}%")))
+                ->when($status !== 'all', fn ($query) => $query->where('status', $status))
+                ->when($date !== '', fn ($query) => $query->whereDate('created_at', $date))
+                ->latest()
+                ->get(),
+            'filters' => [
+                'code' => $code,
+                'customer' => $customer,
+                'status' => $status,
+                'date' => $date,
+            ],
+        ]);
     }
 
     public function paymentShow(Payment $payment)

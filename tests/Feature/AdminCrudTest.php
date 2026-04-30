@@ -384,6 +384,137 @@ class AdminCrudTest extends TestCase
         $response->assertDontSee('Adventure Reef Run');
     }
 
+    public function test_admin_can_filter_reservations_by_code_customer_package_and_destination(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $matchingDestination = Destination::query()->create([
+            'name' => 'Crystal Bay',
+            'slug' => 'crystal-bay',
+            'description' => 'Spot utama untuk pengujian filter reservasi.',
+            'difficulty' => 'mudah',
+            'status' => 'aktif',
+        ]);
+
+        $otherDestination = Destination::query()->create([
+            'name' => 'Wall Point',
+            'slug' => 'wall-point',
+            'description' => 'Spot pembanding untuk pengujian filter reservasi.',
+            'difficulty' => 'menengah',
+            'status' => 'aktif',
+        ]);
+
+        $matchingReservation = $this->createReservation('menunggu_verifikasi');
+        $matchingReservation->user->update(['name' => 'Santa']);
+        $matchingReservation->package->update([
+            'name' => 'Lembongan Morning Escape',
+            'slug' => 'lembongan-morning-escape-filter',
+        ]);
+        $matchingReservation->update([
+            'code' => 'CBR-MATCH-001',
+            'destination_id' => $matchingDestination->id,
+        ]);
+
+        $otherReservation = $this->createReservation('terkonfirmasi');
+        $otherReservation->user->update(['name' => 'Xander']);
+        $otherReservation->package->update([
+            'name' => 'Adventure Reef Run',
+            'slug' => 'adventure-reef-run-filter',
+        ]);
+        $otherReservation->update([
+            'code' => 'CBR-OTHER-001',
+            'destination_id' => $otherDestination->id,
+        ]);
+
+        $response = $this->actingAs($admin)->get(route('admin.reservations.index', [
+            'code' => 'CBR-MATCH',
+            'customer' => 'Santa',
+            'package' => 'Morning Escape',
+            'destination' => 'Crystal',
+        ]));
+
+        $response->assertOk();
+        $response->assertSee('CBR-MATCH-001');
+        $response->assertDontSee('CBR-OTHER-001');
+    }
+
+    public function test_admin_can_filter_payments_by_code_customer_status_and_date(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $matchingReservation = $this->createReservation('menunggu_verifikasi');
+        $matchingReservation->user->update(['name' => 'Santa']);
+        $matchingReservation->update(['code' => 'CBR-PAY-001']);
+
+        $matchingPayment = Payment::query()->create([
+            'reservation_id' => $matchingReservation->id,
+            'amount' => 450000,
+            'method' => 'transfer_bank',
+            'status' => 'menunggu_verifikasi',
+        ]);
+        $matchingPayment->timestamps = false;
+        $matchingPayment->created_at = now()->subDay()->setTime(8, 30);
+        $matchingPayment->updated_at = now()->subDay()->setTime(8, 30);
+        $matchingPayment->save();
+
+        $otherReservation = $this->createReservation('terkonfirmasi');
+        $otherReservation->user->update(['name' => 'Xander']);
+        $otherReservation->update(['code' => 'CBR-PAY-999']);
+
+        $otherPayment = Payment::query()->create([
+            'reservation_id' => $otherReservation->id,
+            'amount' => 980000,
+            'method' => 'transfer_bank',
+            'status' => 'diterima',
+        ]);
+        $otherPayment->timestamps = false;
+        $otherPayment->created_at = now()->setTime(9, 0);
+        $otherPayment->updated_at = now()->setTime(9, 0);
+        $otherPayment->save();
+
+        $response = $this->actingAs($admin)->get(route('admin.payments.index', [
+            'code' => 'CBR-PAY-001',
+            'customer' => 'Santa',
+            'status' => 'menunggu_verifikasi',
+            'date' => now()->subDay()->toDateString(),
+        ]));
+
+        $response->assertOk();
+        $response->assertSee('CBR-PAY-001');
+        $response->assertDontSee('CBR-PAY-999');
+    }
+
+    public function test_admin_can_filter_customers_by_name(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        User::factory()->create([
+            'name' => 'Santa Customer',
+            'email' => 'santa.customer@example.com',
+            'role' => 'customer',
+        ]);
+
+        User::factory()->create([
+            'name' => 'Xander Customer',
+            'email' => 'xander.customer@example.com',
+            'role' => 'customer',
+        ]);
+
+        $response = $this->actingAs($admin)->get(route('admin.customers.index', [
+            'name' => 'Santa',
+        ]));
+
+        $response->assertOk();
+        $response->assertSee('Santa Customer');
+        $response->assertDontSee('Xander Customer');
+    }
+
     private function createReservation(string $status = 'menunggu_verifikasi'): Reservation
     {
         $sequence = Reservation::count() + 1;

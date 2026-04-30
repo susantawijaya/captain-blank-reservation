@@ -11,14 +11,24 @@ use Illuminate\View\View;
 
 class AdminCustomerController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $validated = $request->validate([
+            'name' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $name = trim($validated['name'] ?? '');
+
         return view('admin.customers.index', [
             'customers' => User::query()
                 ->where('role', 'customer')
+                ->when($name !== '', fn ($query) => $query->where('name', 'like', "%{$name}%"))
                 ->withCount(['reservations', 'reviews'])
                 ->orderBy('name')
                 ->get(),
+            'filters' => [
+                'name' => $name,
+            ],
         ]);
     }
 

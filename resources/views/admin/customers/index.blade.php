@@ -6,6 +6,17 @@
 @endsection
 
 @section('content')
+<div class="card" style="margin-bottom: 16px;">
+    <div class="card-body">
+        <form class="form-grid" method="GET" action="{{ route('admin.customers.index') }}" data-auto-filter-form data-auto-submit-delay="200">
+            <div class="field">
+                <label for="name">Cari nama</label>
+                <input id="name" name="name" type="text" value="{{ $filters['name'] ?? '' }}" placeholder="Contoh: Santa" data-auto-filter-input>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="table-wrap">
     <table>
         <thead>
