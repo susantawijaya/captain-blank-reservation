@@ -1,0 +1,356 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Segoe UI', 'Trebuchet MS', 'Aptos', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    --site-hero-image: url("/images/site/nusa-lembongan-hero.jpg");
+}
+
+@layer base {
+    body {
+        @apply text-slate-900 antialiased;
+    }
+
+    body.site-background {
+        min-height: 100vh;
+        background:
+            linear-gradient(180deg, rgba(244, 247, 251, 0.9), rgba(244, 247, 251, 0.96)),
+            var(--page-hero-image, var(--site-hero-image)) center / cover fixed no-repeat;
+    }
+
+    a {
+        @apply transition-colors duration-200;
+    }
+}
+
+@layer components {
+    .navbar {
+        @apply sticky top-0 z-50 border-b border-sky-100/80 bg-white/90 shadow-sm shadow-sky-950/5 backdrop-blur-xl;
+    }
+
+    .navbar-inner {
+        @apply flex min-h-20 flex-col gap-4 py-4 lg:flex-row lg:items-center lg:justify-between;
+    }
+
+    .brand {
+        @apply inline-flex items-center gap-3 text-lg font-black tracking-tight text-slate-950;
+    }
+
+    .brand-logo {
+        @apply h-12 w-12 rounded-lg border border-sky-100 bg-white object-contain p-1 shadow-sm;
+    }
+
+    .brand-mark {
+        @apply grid h-11 w-11 place-items-center rounded-lg bg-gradient-to-br from-sky-700 to-teal-500 text-sm font-black text-white shadow-lg shadow-sky-900/20;
+    }
+
+    .nav-links {
+        @apply flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-semibold text-slate-600;
+    }
+
+    .nav-links a {
+        @apply hover:text-sky-700;
+    }
+
+    .nav-actions {
+        @apply flex flex-wrap items-center gap-3;
+    }
+
+    .button {
+        @apply inline-flex min-h-11 items-center justify-center rounded-lg px-5 text-sm font-bold shadow-sm transition duration-200;
+    }
+
+    .button.primary {
+        @apply bg-sky-700 text-white shadow-sky-900/20 hover:bg-sky-800;
+    }
+
+    .button.secondary {
+        @apply border border-sky-100 bg-white text-sky-800 hover:border-sky-200 hover:bg-sky-50;
+    }
+
+    .hero {
+        min-height: 620px;
+        @apply relative isolate grid items-center overflow-hidden bg-sky-950 text-white;
+        background:
+            linear-gradient(90deg, rgba(8, 47, 73, 0.92), rgba(8, 47, 73, 0.52), rgba(15, 118, 110, 0.18)),
+            url("/images/site/hero-ocean.svg") center / cover no-repeat;
+    }
+
+    .hero::after {
+        content: "";
+        @apply absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-slate-50 to-transparent;
+    }
+
+    .hero-content {
+        @apply relative z-10 max-w-3xl py-24 lg:py-32;
+    }
+
+    .eyebrow {
+        @apply mb-4 inline-flex rounded-full border border-cyan-200/40 bg-cyan-100/15 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-cyan-100;
+    }
+
+    .hero h1,
+    .page-header h1 {
+        @apply m-0 text-5xl font-black leading-none tracking-tight md:text-7xl;
+    }
+
+    .hero p,
+    .page-header p {
+        @apply mt-6 max-w-2xl text-lg leading-8 text-sky-100;
+    }
+
+    .hero-actions {
+        @apply mt-8 flex flex-wrap gap-3;
+    }
+
+    .section {
+        @apply py-16 md:py-20;
+    }
+
+    .section.alt {
+        background: rgba(240, 249, 255, 0.84);
+    }
+
+    .section-head {
+        @apply mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between;
+    }
+
+    .section-head h2 {
+        @apply m-0 text-3xl font-black tracking-tight text-slate-950 md:text-4xl;
+    }
+
+    .section-head p {
+        @apply mt-2 max-w-xl leading-7 text-slate-600;
+    }
+
+    .grid {
+        @apply grid gap-5;
+    }
+
+    .grid.three {
+        @apply md:grid-cols-2 xl:grid-cols-3;
+    }
+
+    .grid.four {
+        @apply sm:grid-cols-2 lg:grid-cols-4;
+    }
+
+    .card {
+        @apply overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm shadow-slate-950/5 transition duration-200;
+    }
+
+    .card:hover {
+        @apply -translate-y-0.5 shadow-xl shadow-sky-950/10;
+    }
+
+    .card-body {
+        @apply p-5;
+    }
+
+    .stack-card {
+        @apply flex h-full flex-col;
+    }
+
+    .stack-card .card-body {
+        @apply flex h-full flex-col;
+    }
+
+    .card-copy {
+        @apply flex-1;
+    }
+
+    .card-actions {
+        @apply mt-auto pt-4;
+    }
+
+    .package-card-title {
+        @apply flex min-h-[3.75rem] items-start text-xl font-black text-slate-950;
+    }
+
+    .package-card-description {
+        @apply mt-2 min-h-[8rem] leading-7 text-slate-600;
+    }
+
+    .package-card-meta {
+        @apply min-h-[3rem];
+    }
+
+    .package-card-price {
+        @apply mt-4 min-h-[3rem];
+    }
+
+    .package-card-availability {
+        @apply mt-3 min-h-[5.5rem];
+    }
+
+    .package-card-destinations {
+        @apply min-h-[4.5rem] content-start;
+    }
+
+    .image-placeholder {
+        @apply grid min-h-48 place-items-center bg-gradient-to-br from-sky-800 via-sky-600 to-teal-500 p-6 text-center text-lg font-black text-sky-50;
+    }
+
+    .schedule-list {
+        @apply mt-4 space-y-3;
+    }
+
+    .schedule-item {
+        @apply rounded-lg border border-slate-200 bg-white p-4;
+    }
+
+    .schedule-item-head {
+        @apply flex flex-wrap items-center justify-between gap-3;
+    }
+
+    .info-table {
+        @apply overflow-hidden rounded-lg border border-slate-200;
+    }
+
+    .info-table table {
+        @apply w-full;
+    }
+
+    .info-table th {
+        @apply w-44 bg-slate-50 text-left text-sm font-bold normal-case tracking-normal text-slate-700;
+    }
+
+    .info-table td {
+        @apply text-sm text-slate-900;
+    }
+
+    .meta {
+        @apply my-3 flex flex-wrap gap-2 text-sm text-slate-500;
+    }
+
+    .price {
+        @apply text-2xl font-black text-sky-900;
+    }
+
+    .badge {
+        @apply inline-flex min-h-7 items-center rounded-full bg-slate-100 px-3 text-xs font-black capitalize text-slate-600;
+    }
+
+    .badge.success {
+        @apply bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200;
+    }
+
+    .badge.warning {
+        @apply bg-amber-50 text-amber-700 ring-1 ring-amber-200;
+    }
+
+    .badge.danger {
+        @apply bg-red-50 text-red-700 ring-1 ring-red-200;
+    }
+
+    .table-wrap {
+        @apply overflow-x-auto rounded-lg border border-slate-200 bg-white shadow-sm shadow-slate-950/5;
+    }
+
+    table {
+        @apply w-full border-collapse;
+    }
+
+    th,
+    td {
+        @apply border-b border-slate-100 px-4 py-4 text-left align-top;
+    }
+
+    th {
+        @apply bg-slate-50 text-xs font-black uppercase tracking-wide text-slate-500;
+    }
+
+    .form-grid {
+        @apply grid gap-4;
+    }
+
+    .form-grid.two {
+        @apply md:grid-cols-2;
+    }
+
+    .field label {
+        @apply mb-2 block text-sm font-black text-slate-700;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+        @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100;
+    }
+
+    .field textarea {
+        @apply min-h-32;
+    }
+
+    .page-header {
+        @apply relative isolate grid min-h-[36rem] items-center overflow-hidden text-white;
+        background:
+            linear-gradient(120deg, rgba(2, 6, 23, 0.84), rgba(8, 47, 73, 0.68), rgba(15, 118, 110, 0.26)),
+            var(--page-hero-image, var(--site-hero-image)) center / cover no-repeat;
+    }
+
+    .page-header::after {
+        content: "";
+        @apply absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-slate-50 to-transparent;
+    }
+
+    .page-header > .container {
+        @apply relative z-10 py-24 lg:py-32;
+    }
+
+    .footer {
+        @apply bg-sky-950 py-12 text-sky-100;
+    }
+
+    .footer-grid {
+        @apply grid gap-8 md:grid-cols-[1.4fr_1fr_1fr];
+    }
+
+    .admin-shell {
+        @apply grid min-h-screen lg:grid-cols-[280px_minmax(0,1fr)];
+    }
+
+    .sidebar {
+        @apply bg-sky-950 p-5 text-sky-100;
+    }
+
+    .sidebar a:not(.brand) {
+        @apply my-1 block rounded-lg px-3 py-2.5 text-sm font-bold text-sky-100 hover:bg-white/10;
+    }
+
+    .admin-main {
+        @apply min-w-0;
+    }
+
+    .topbar {
+        @apply flex flex-col gap-3 border-b border-slate-200 bg-white px-6 py-5 shadow-sm shadow-slate-950/5 md:flex-row md:items-center md:justify-between;
+    }
+
+    .admin-content {
+        @apply p-5 md:p-7;
+    }
+
+    .stats-grid {
+        @apply mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4;
+    }
+
+    .stat-card {
+        @apply rounded-lg border border-slate-200 bg-white p-5 shadow-sm shadow-slate-950/5;
+    }
+
+    .stat-card strong {
+        @apply mt-2 block text-3xl font-black text-sky-900;
+    }
+}
+
+@layer utilities {
+    .container {
+        width: min(1280px, calc(100% - clamp(24px, 10vw, 180px)));
+        margin-inline: auto;
+    }
+}
