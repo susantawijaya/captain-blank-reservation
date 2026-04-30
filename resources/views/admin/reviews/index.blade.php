@@ -20,7 +20,7 @@
                 <tr>
                     <td>{{ $review->user->name }}</td>
                     <td>{{ $review->package->name }}</td>
-                    <td>{{ $review->rating }}/5</td>
+                    <td><x-rating-stars :rating="$review->rating" size="sm" /></td>
                     <td><x-status-badge :status="$review->status" /></td>
                     <td>{{ \Illuminate\Support\Str::limit($review->comment, 120) }}</td>
                     <td>

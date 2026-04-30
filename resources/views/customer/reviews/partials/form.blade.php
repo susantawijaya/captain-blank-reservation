@@ -15,17 +15,27 @@
             <p class="mt-2 text-sm font-medium text-red-600">{{ $message }}</p>
         @enderror
     </div>
-    <div class="field">
-        <label for="rating">Rating</label>
-        <select id="rating" name="rating" required>
+    <fieldset class="field field-reset">
+        <legend>Rating</legend>
+        <div class="rating-picker" role="radiogroup" aria-label="Pilih rating bintang">
             @for ($rating = 5; $rating >= 1; $rating--)
-                <option value="{{ $rating }}" @selected((string) old('rating', 5) === (string) $rating)>{{ $rating }}</option>
+                <input
+                    class="rating-picker-input"
+                    id="rating-{{ $rating }}"
+                    name="rating"
+                    type="radio"
+                    value="{{ $rating }}"
+                    @checked((string) old('rating', 5) === (string) $rating)
+                    required
+                >
+                <label class="rating-picker-star" for="rating-{{ $rating }}" aria-label="{{ $rating }} bintang">★</label>
             @endfor
-        </select>
+        </div>
+        <p class="rating-picker-caption">Klik bintang untuk memberi penilaian.</p>
         @error('rating')
             <p class="mt-2 text-sm font-medium text-red-600">{{ $message }}</p>
         @enderror
-    </div>
+    </fieldset>
     <div class="field">
         <label for="comment">Komentar</label>
         <textarea id="comment" name="comment" placeholder="Bagaimana pengalaman snorkeling?" required>{{ old('comment') }}</textarea>

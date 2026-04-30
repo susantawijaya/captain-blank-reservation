@@ -731,6 +731,21 @@ tbody tr:hover td {
     font-weight: 700;
 }
 
+.field-reset {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.field-reset legend {
+    margin-bottom: 8px;
+    padding: 0;
+    color: var(--sea-deep);
+    font-size: 0.92rem;
+    font-weight: 700;
+}
+
 .field input,
 .field select,
 .field textarea {
@@ -747,6 +762,94 @@ tbody tr:hover td {
 .field textarea {
     min-height: 130px;
     resize: vertical;
+}
+
+.rating-picker {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    gap: 6px;
+}
+
+.rating-picker-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.rating-picker-star {
+    color: #d4dde6;
+    font-size: clamp(2rem, 4vw, 2.4rem);
+    line-height: 1;
+    cursor: pointer;
+    transition: transform 0.18s ease, color 0.18s ease;
+}
+
+.rating-picker-star:hover,
+.rating-picker-star:hover ~ .rating-picker-star,
+.rating-picker-input:checked ~ .rating-picker-star {
+    color: #f59e0b;
+}
+
+.rating-picker-star:hover,
+.rating-picker-input:focus-visible + .rating-picker-star {
+    transform: translateY(-1px);
+}
+
+.rating-picker-input:focus-visible + .rating-picker-star {
+    outline: 3px solid rgba(15, 122, 169, 0.18);
+    outline-offset: 5px;
+    border-radius: 8px;
+}
+
+.rating-picker-caption {
+    margin: 10px 0 0;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.rating-stars {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #d4dde6;
+    line-height: 1;
+}
+
+.rating-stars--sm {
+    gap: 4px;
+}
+
+.rating-stars--lg {
+    gap: 8px;
+}
+
+.rating-star {
+    font-size: 1.2rem;
+}
+
+.rating-stars--sm .rating-star {
+    font-size: 1rem;
+}
+
+.rating-stars--lg .rating-star {
+    font-size: 1.5rem;
+}
+
+.rating-star.is-filled {
+    color: #f59e0b;
+}
+
+.rating-stars-value {
+    margin-left: 6px;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.review-card-rating {
+    display: flex;
+    align-items: center;
 }
 
 .field input[type="file"] {

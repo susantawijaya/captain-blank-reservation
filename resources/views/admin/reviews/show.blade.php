@@ -8,7 +8,7 @@
         <div class="card-body">
             <h1>Review {{ $review->user->name }}</h1>
             <p><strong>Paket:</strong> {{ $review->package->name }}</p>
-            <p><strong>Rating:</strong> {{ $review->rating }}/5</p>
+            <p><strong>Rating:</strong> <x-rating-stars :rating="$review->rating" size="sm" show-value /></p>
             <p><strong>Status:</strong> <x-status-badge :status="$review->status" /></p>
             <p class="mt-4 leading-7 text-slate-700">{{ $review->comment }}</p>
         </div>

@@ -75,7 +75,7 @@
                             @forelse ($customer->reviews as $review)
                                 <tr>
                                     <td>{{ $review->package?->name ?? '-' }}</td>
-                                    <td>{{ $review->rating }}/5</td>
+                                    <td><x-rating-stars :rating="$review->rating" size="sm" /></td>
                                     <td>{{ ucfirst($review->status) }}</td>
                                     <td>{{ $review->comment }}</td>
                                 </tr>
