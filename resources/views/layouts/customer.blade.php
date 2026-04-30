@@ -45,7 +45,9 @@
             <div class="customer-hero-card">
                 <div class="customer-hero-inner">
                     <div class="customer-hero-copy">
-                        <span class="eyebrow">{{ $customerPageBadge }}</span>
+                        @if ($customerPageBadge !== '')
+                            <span class="eyebrow">{{ $customerPageBadge }}</span>
+                        @endif
                         <h1>{{ $customerPageTitle }}</h1>
                         <p>{{ $customerPageIntro }}</p>
                     </div>
@@ -60,7 +62,6 @@
                             @hasSection('customer_actions')
                                 @yield('customer_actions')
                             @else
-                                <a class="button secondary{{ request()->routeIs('customer.dashboard') ? ' is-active' : '' }}" href="{{ route('customer.dashboard') }}">Ringkasan Akun</a>
                                 <a class="button primary{{ request()->routeIs('reservations.create') ? ' is-active' : '' }}" href="{{ route('reservations.create') }}">Buat Reservasi</a>
                             @endif
                         </div>
@@ -72,23 +73,14 @@
 
     <section class="section customer-shell-section">
         <div class="container customer-shell">
-            <aside class="customer-sidebar">
-                <div class="customer-sidebar-card">
-                    <div class="customer-sidebar-head">
-                        <span class="customer-sidebar-kicker">Navigasi pelanggan</span>
-                        <p>Pilih menu aktif dengan cepat. Halaman yang sedang dibuka akan tampil berbeda agar mudah dikenali.</p>
-                    </div>
-                    <nav class="customer-nav">
-                        @foreach ($customerNavItems as $item)
-                            @php($isActive = collect($item['patterns'])->contains(fn ($pattern) => request()->routeIs($pattern)))
-                            <a class="{{ $isActive ? 'is-active' : '' }}" href="{{ $item['route'] }}" @if($isActive) aria-current="page" @endif>
-                                <span>{{ $item['label'] }}</span>
-                                <small>{{ $item['description'] }}</small>
-                            </a>
-                        @endforeach
-                    </nav>
-                </div>
-            </aside>
+            <div class="customer-nav-strip">
+                <nav class="customer-nav">
+                    @foreach ($customerNavItems as $item)
+                        @php($isActive = collect($item['patterns'])->contains(fn ($pattern) => request()->routeIs($pattern)))
+                        <a class="{{ $isActive ? 'is-active' : '' }}" href="{{ $item['route'] }}" @if($isActive) aria-current="page" @endif>{{ $item['label'] }}</a>
+                    @endforeach
+                </nav>
+            </div>
             <div class="customer-main">
                 @yield('customer_content')
             </div>

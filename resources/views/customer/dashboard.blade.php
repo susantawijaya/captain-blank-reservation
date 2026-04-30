@@ -1,10 +1,9 @@
 @extends('layouts.customer')
 
 @section('title', 'Dashboard Pelanggan')
-@section('customer_badge', 'Dashboard Pelanggan')
+@section('customer_badge', '')
 @section('customer_intro', 'Pantau reservasi terbaru, progres pesan ke admin, dan review snorkeling Anda dari satu dashboard yang lebih ringkas.')
 @section('customer_actions')
-    <a class="button secondary" href="{{ route('customer.messages.index') }}">Pesan Saya</a>
     <a class="button primary" href="{{ route('reservations.create') }}">Buat Reservasi</a>
 @endsection
 
