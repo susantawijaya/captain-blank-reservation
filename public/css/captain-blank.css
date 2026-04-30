@@ -350,7 +350,7 @@ textarea {
     position: relative;
     isolation: isolate;
     display: grid;
-    min-height: 620px;
+    min-height: clamp(480px, 58vh, 560px);
     align-items: center;
     overflow: hidden;
     color: #ffffff;
@@ -366,15 +366,15 @@ textarea {
     right: 0;
     bottom: 0;
     left: 0;
-    height: 120px;
+    height: 88px;
     background: linear-gradient(180deg, rgba(247, 251, 255, 0), #f7fbff);
 }
 
 .hero-content {
     position: relative;
     z-index: 1;
-    width: min(720px, 100%);
-    padding: 96px 0 132px;
+    width: min(680px, 100%);
+    padding: 74px 0 98px;
 }
 
 .eyebrow {
@@ -403,17 +403,17 @@ textarea {
 .hero p,
 .page-header p {
     max-width: 720px;
-    margin: 20px 0 0;
+    margin: 16px 0 0;
     color: rgba(235, 248, 255, 0.88);
     font-size: 1.08rem;
-    line-height: 1.8;
+    line-height: 1.72;
 }
 
 .hero-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    margin-top: 30px;
+    margin-top: 24px;
 }
 
 .section {
@@ -869,7 +869,7 @@ tbody tr:hover td {
     position: relative;
     isolation: isolate;
     display: grid;
-    min-height: 520px;
+    min-height: clamp(320px, 40vh, 400px);
     align-items: center;
     overflow: hidden;
     color: #ffffff;
@@ -881,7 +881,23 @@ tbody tr:hover td {
 .page-header > .container {
     position: relative;
     z-index: 1;
-    padding: 92px 0 128px;
+    padding: 68px 0 84px;
+}
+
+.page-header:has(p) {
+    min-height: clamp(340px, 46vh, 430px);
+}
+
+.page-header:has(p) > .container {
+    padding: 74px 0 92px;
+}
+
+.page-header:not(:has(p)) {
+    min-height: clamp(240px, 32vh, 300px);
+}
+
+.page-header:not(:has(p)) > .container {
+    padding: 56px 0 68px;
 }
 
 .footer {
@@ -1342,7 +1358,7 @@ tbody tr:hover td {
 }
 
 .customer-hero {
-    padding: 32px 0 12px;
+    padding: 24px 0 8px;
 }
 
 .customer-hero-card {
@@ -1361,9 +1377,9 @@ tbody tr:hover td {
     z-index: 1;
     display: grid;
     grid-template-columns: minmax(0, 1.2fr) minmax(290px, 0.8fr);
-    gap: 24px;
+    gap: 20px;
     align-items: end;
-    padding: 34px;
+    padding: 28px;
 }
 
 .customer-hero-copy {
@@ -1378,11 +1394,11 @@ tbody tr:hover td {
 }
 
 .customer-hero-copy p {
-    margin: 18px 0 0;
+    margin: 14px 0 0;
     max-width: 700px;
     color: rgba(235, 248, 255, 0.84);
     font-size: 1.08rem;
-    line-height: 1.8;
+    line-height: 1.72;
 }
 
 .customer-hero-aside {
@@ -1684,9 +1700,20 @@ tbody tr:hover td {
         min-height: auto;
     }
 
-    .hero-content,
+    .hero-content {
+        padding: 62px 0 78px;
+    }
+
     .page-header > .container {
-        padding: 82px 0 120px;
+        padding: 60px 0 74px;
+    }
+
+    .page-header:not(:has(p)) > .container {
+        padding: 52px 0 62px;
+    }
+
+    .customer-hero-inner {
+        padding: 24px;
     }
 
     .admin-shell {
@@ -1695,6 +1722,22 @@ tbody tr:hover td {
 }
 
 @media (max-width: 640px) {
+    .hero-content {
+        padding: 54px 0 68px;
+    }
+
+    .page-header > .container {
+        padding: 52px 0 64px;
+    }
+
+    .page-header:not(:has(p)) > .container {
+        padding: 46px 0 56px;
+    }
+
+    .customer-hero {
+        padding: 18px 0 6px;
+    }
+
     .navbar-inner {
         min-height: 72px;
     }
