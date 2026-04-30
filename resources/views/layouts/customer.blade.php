@@ -5,6 +5,8 @@
     $customerPageTitle = trim($__env->yieldContent('customer_title', $__env->yieldContent('title', 'Portal Pelanggan')));
     $customerPageIntro = trim($__env->yieldContent('customer_intro', 'Kelola reservasi, pembayaran, pesan, review, dan profil Anda dari satu area pelanggan yang lebih rapi.'));
     $customerPageBadge = trim($__env->yieldContent('customer_badge', 'Portal Pelanggan'));
+    $customerActionContent = trim($__env->yieldContent('customer_actions'));
+    $customerHideDefaultAction = trim($__env->yieldContent('customer_hide_default_action')) !== '';
     $customerNavItems = [
         [
             'label' => 'Dashboard',
@@ -58,13 +60,15 @@
                             <span>{{ $customerUser?->email }}</span>
                             <span>{{ $customerUser?->phone ?: 'WhatsApp belum diisi' }}</span>
                         </div>
-                        <div class="customer-hero-actions">
-                            @hasSection('customer_actions')
-                                @yield('customer_actions')
-                            @else
+                        @if ($customerActionContent !== '' || ! $customerHideDefaultAction)
+                            <div class="customer-hero-actions">
+                                @if ($customerActionContent !== '')
+                                    {!! $__env->yieldContent('customer_actions') !!}
+                                @else
                                 <a class="button primary{{ request()->routeIs('reservations.create') ? ' is-active' : '' }}" href="{{ route('reservations.create') }}">Buat Reservasi</a>
-                            @endif
-                        </div>
+                                @endif
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

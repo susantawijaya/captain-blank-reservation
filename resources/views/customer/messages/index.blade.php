@@ -4,7 +4,6 @@
 @section('customer_badge', 'Pesan Pelanggan')
 @section('customer_intro', 'Semua pertanyaan yang pernah Anda kirim ke admin tersimpan di sini lengkap dengan status dan balasannya.')
 @section('customer_actions')
-    <a class="button secondary" href="{{ route('customer.dashboard') }}">Dashboard</a>
     <a class="button primary" href="{{ route('contact.index') }}">Kirim Pesan Baru</a>
 @endsection
 

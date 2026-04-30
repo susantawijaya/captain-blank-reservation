@@ -4,7 +4,6 @@
 @section('customer_badge', 'Review Pelanggan')
 @section('customer_intro', 'Semua review snorkeling yang pernah Anda kirim terkumpul di sini dan siap ditinjau kembali.')
 @section('customer_actions')
-    <a class="button secondary" href="{{ route('customer.dashboard') }}">Dashboard</a>
     <a class="button primary" href="{{ route('customer.reviews.create') }}">Buat Review</a>
 @endsection
 

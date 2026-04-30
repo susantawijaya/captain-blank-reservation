@@ -3,9 +3,7 @@
 @section('title', 'Dashboard Pelanggan')
 @section('customer_badge', '')
 @section('customer_intro', 'Pantau reservasi terbaru, progres pesan ke admin, dan review snorkeling Anda dari satu dashboard yang lebih ringkas.')
-@section('customer_actions')
-    <a class="button primary" href="{{ route('reservations.create') }}">Buat Reservasi</a>
-@endsection
+@section('customer_hide_default_action', '1')
 
 @section('customer_content')
 <div class="customer-page-stack">

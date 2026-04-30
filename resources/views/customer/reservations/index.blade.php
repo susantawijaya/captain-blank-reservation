@@ -4,7 +4,6 @@
 @section('customer_badge', 'Reservasi Saya')
 @section('customer_intro', 'Semua reservasi pelanggan tersimpan di sini. Buka detail, cek status, atau edit pemesanan sebelum bukti pembayaran dikirim.')
 @section('customer_actions')
-    <a class="button secondary" href="{{ route('customer.dashboard') }}">Dashboard</a>
     <a class="button primary" href="{{ route('reservations.create') }}">Reservasi Baru</a>
 @endsection
 
